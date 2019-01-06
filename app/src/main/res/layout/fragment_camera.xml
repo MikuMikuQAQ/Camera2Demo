@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
+                                             android:layout_height="match_parent">
+
+    <com.camera.cameratest.view.AutoFitTextureView
+            android:id="@+id/camera_texture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/camera_function"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"/>
+
+    <android.support.v7.widget.RecyclerView
+            android:id="@+id/filter_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/camera_function"
+            android:background="#fff"
+            android:layout_marginTop="?attr/actionBarSize" android:visibility="gone"/>
+
+    <android.support.constraint.ConstraintLayout
+            android:focusableInTouchMode="false"
+            android:id="@+id/camera_toolbar"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:background="#fff"
+            android:layout_height="?attr/actionBarSize">
+
+        <ImageView
+                android:focusableInTouchMode="false"
+                android:id="@+id/camera_flash_off"
+                android:src="@drawable/ic_shanguangdeng"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp" app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp" app:layout_constraintHorizontal_bias="0.02"/>
+
+        <ImageView
+                android:focusableInTouchMode="false"
+                android:id="@+id/camera_flash_on"
+                android:src="@drawable/ic_shanguangdeng_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp" app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp" app:layout_constraintHorizontal_bias="0.02" android:visibility="gone"/>
+
+        <ImageView
+                android:focusableInTouchMode="false"
+                android:id="@+id/camera_flash_auto"
+                android:src="@drawable/ic_flash_auto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp" app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp" app:layout_constraintHorizontal_bias="0.02"
+                android:visibility="gone"/>
+
+        <ImageView
+                android:focusableInTouchMode="false"
+                android:id="@+id/camera_scale"
+                android:src="@drawable/ic_bili"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp" app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp" app:layout_constraintHorizontal_bias="0.98"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+            android:focusableInTouchMode="false"
+            android:id="@+id/camera_function"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:background="#fff"
+            android:layout_height="124dp">
+
+        <ImageView
+                android:focusableInTouchMode="false"
+                android:id="@+id/camera_tripper"
+                android:src="@drawable/ic_xiangji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp" app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp"/>
+
+        <ImageView
+                android:focusableInTouchMode="false"
+                android:id="@+id/camera_gallery"
+                android:src="@drawable/ic_tuku"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp" android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toStartOf="@+id/camera_tripper"
+                android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp"/>
+
+        <ImageView
+                android:focusableInTouchMode="false"
+                android:id="@+id/camera_filter"
+                android:src="@drawable/ic_lvjing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" app:layout_constraintStart_toEndOf="@+id/camera_tripper"
+                android:layout_marginStart="8dp" app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp" app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="8dp"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <ImageView
+            android:id="@+id/front_flash"
+            android:background="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:visibility="gone"/>
+
+</RelativeLayout>
