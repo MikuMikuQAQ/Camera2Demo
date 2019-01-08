@@ -85,7 +85,7 @@ class PreviewActivity : AppCompatActivity(), View.OnClickListener {
         if (fileString != null){
             val file = File(fileString)
             if (comeForm == Camera2Activity::class.java.toString()){
-                val bitmap = bitmapRotation(BitmapFactory.decodeFile(fileString,bitmapOption))//BitmapFactory.decodeFile(fileString,bitmapOption)
+                val bitmap = BitmapFactory.decodeFile(fileString,bitmapOption)//bitmapRotation(BitmapFactory.decodeFile(fileString,bitmapOption))//BitmapFactory.decodeFile(fileString,bitmapOption)
                 Glide.with(this@PreviewActivity).load(FilterUtil.imageFilter(this,bitmap, kinds)).apply(option).into(photo)
             }
             else

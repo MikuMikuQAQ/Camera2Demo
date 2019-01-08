@@ -10,15 +10,21 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.support.v4.app.ActivityCompat
+import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.util.Log.e
 import android.view.View
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.camera.cameratest.camera2.Camera2Activity
 import com.camera.cameratest.util.HttpUtil
 import com.camera.cameratest.util.LoadSystemPhotos
 import com.camera.cameratest.database.CameraOrientation
 import com.camera.cameratest.database.FilterLibrary
+import com.camera.cameratest.firstrun.FirstFragment
+import com.camera.cameratest.firstrun.SecondFragment
+import com.camera.cameratest.firstrun.ThirdFragment
+import com.camera.cameratest.firstrun.adapter.FragmentAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.Call
 import okhttp3.Callback
@@ -29,6 +35,10 @@ import java.io.IOException
 import java.lang.Thread.sleep
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
+
+    private lateinit var adapter:FragmentAdapter
+
+    private var fragments:MutableList<Fragment> = ArrayList()
 
     companion object {
         const val ADDRESS_AD = "https://cn.bing.com/sa/simg/hpb/NorthMale_EN-US8782628354_1920x1080.jpg"
@@ -75,9 +85,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        status = true
-        i = 5
-        getUsesPermission()
+        firstRun()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -104,6 +112,29 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         textView2.setOnClickListener(this)
     }
 
+    private fun firstRun(){
+        val shared = getSharedPreferences("FirstRun",0)
+        val firstRun = shared.getBoolean("First",true)
+        if (firstRun){
+            //Toast.makeText(this,"第一次",Toast.LENGTH_LONG).show()
+            usesPermission()
+            Thread(Runnable {
+                writeDB()
+            }).start()
+            fragments.add(FirstFragment.newInstance())
+            fragments.add(SecondFragment.newInstance())
+            fragments.add(ThirdFragment.newInstance())
+            adapter = FragmentAdapter(supportFragmentManager,this,fragments)
+            first_run.adapter = adapter
+            first_run.visibility = View.VISIBLE
+        }else{
+            //Toast.makeText(this,"no",Toast.LENGTH_LONG).show()
+            status = true
+            i = 5
+            getUsesPermission()
+        }
+    }
+
     private var handler = object : Handler(){
         override fun handleMessage(msg: Message?) {
             super.handleMessage(msg)
@@ -116,13 +147,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private var thread = Thread(Runnable {
-        Connector.getDatabase()
-        LitePal.deleteAll(CameraOrientation::class.java)
-        LitePal.deleteAll(FilterLibrary::class.java)
-        CameraOrientation(1).save()
-        addFilter()
-
-        LoadSystemPhotos.loadDatabase(this)
         while (status){
             var msg = Message.obtain()
             msg.what = COUNT_TIME
@@ -155,6 +179,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    private fun usesPermission() {
+        var permissionList: MutableList<String> = ArrayList()
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.CAMERA)
+        }
+        if (permissionList.isNotEmpty()) {
+            var permissions = permissionList.toTypedArray()
+            ActivityCompat.requestPermissions(this, permissions, 1)
+        }else{
+            val shared = getSharedPreferences("FirstRun",0)
+            shared.edit().putBoolean("First",false).apply()
+        }
+    }
+
     private fun playAD(){
         loadAD()
         if(!thread.isAlive) thread.start()
@@ -173,5 +214,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         FilterLibrary(0x05,"鱼眼").save()
         FilterLibrary(0x06,"旋转").save()
         FilterLibrary(0x07,"浮雕").save()
+    }
+
+    private fun writeDB(){
+        Connector.getDatabase()
+        LitePal.deleteAll(CameraOrientation::class.java)
+        LitePal.deleteAll(FilterLibrary::class.java)
+        CameraOrientation(1).save()
+        addFilter()
     }
 }
