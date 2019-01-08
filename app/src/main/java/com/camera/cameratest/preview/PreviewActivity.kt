@@ -25,22 +25,20 @@ class PreviewActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var formIntent: Intent
     private lateinit var comeForm:String
     private lateinit var file:String
+    private lateinit var bitmap: Bitmap
     private var kinds:Int = 0x00
     var bitmapOption = BitmapFactory.Options()
 
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.share_qq -> {
-                ShareUtil.shareQQ(this@PreviewActivity,
-                        BitmapFactory.decodeFile(file, bitmapOption))
+                ShareUtil.shareQQ(this@PreviewActivity, bitmap)
             }
             R.id.share_sina -> {
-                ShareUtil.shareSina(this@PreviewActivity,
-                        BitmapFactory.decodeFile(file, bitmapOption))
+                ShareUtil.shareSina(this@PreviewActivity,bitmap)
             }
             R.id.share_wechat -> {
-                ShareUtil.shareWechat(this@PreviewActivity,
-                        BitmapFactory.decodeFile(file, bitmapOption))
+                ShareUtil.shareWechat(this@PreviewActivity,bitmap)
             }
         }
     }
@@ -86,10 +84,12 @@ class PreviewActivity : AppCompatActivity(), View.OnClickListener {
             if (comeForm == Camera2Activity::class.java.toString()){
                 kinds = formIntent.getStringExtra("kinds").toInt()
                 val bitmap = BitmapFactory.decodeFile(fileString,bitmapOption)//bitmapRotation(BitmapFactory.decodeFile(fileString,bitmapOption))//BitmapFactory.decodeFile(fileString,bitmapOption)
-                Glide.with(this@PreviewActivity).load(FilterUtil.imageFilter(this,bitmap, kinds)).apply(option).into(photo)
+                this.bitmap = FilterUtil.imageFilter(this,bitmap, kinds)!!
+                Glide.with(this@PreviewActivity).load(this.bitmap).apply(option).into(photo)
             }
             else
-                Glide.with(this@PreviewActivity).load(file).apply(option).into(photo)
+                Glide.with(this@PreviewActivity).load(
+                        BitmapFactory.decodeFile(fileString, bitmapOption)).apply(option).into(photo)
         }
     }
 
